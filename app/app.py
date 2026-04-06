@@ -66,6 +66,8 @@ if uploaded_video is not None:
     tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') 
     tfile.write(uploaded_video.read())
     video_path = tfile.name
+
+    tfile.close()
     
     col1, col2 = st.columns([1, 1])
     
@@ -174,4 +176,8 @@ if uploaded_video is not None:
                     st.pyplot(fft_fig)
 
     # Cleanup the temporary video file
-    os.unlink(video_path)
+    try:
+        if os.path.exists(video_path):
+            os.unlink(video_path)
+    except PermissionError:
+        pass
