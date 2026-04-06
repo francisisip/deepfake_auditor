@@ -82,6 +82,7 @@ if uploaded_video is not None:
                 cap = cv2.VideoCapture(video_path)
                 fake_probabilities = []
                 frames_processed = 0
+                all_analyzed_frames = []
                 
                 # Process variables to track the singular face that looked the *most* fake.
                 # We do this because explainability on a harmless frame isn't useful for the user.
@@ -110,7 +111,8 @@ if uploaded_video is not None:
                                 probabilities = torch.nn.functional.softmax(output[0], dim=0)
                                 fake_prob = probabilities[1].item() * 100
                                 fake_probabilities.append(fake_prob)
-                            
+                                all_analyzed_frames.append((face, fake_prob))
+
                             frames_processed += 1
                             
                             # If this face scored higher on the fake scale than previous ones,
@@ -127,6 +129,18 @@ if uploaded_video is not None:
                     avg_fake_prob = sum(fake_probabilities) / len(fake_probabilities)
                     
                     st.write(f"Frames analyzed: **{frames_processed}**")
+
+                    st.markdown("---")
+                    st.subheader("All Analyzed Frames")
+                    st.write("Here are the individual faces extracted and their respective deepfake scores:")
+
+                    # Create a grid of 5 columns
+                    cols = st.columns(5)
+                    for idx, (face_img, prob) in enumerate(all_analyzed_frames):
+                        with cols[idx % 5]:
+                            # Color-code the caption based on the result
+                            label = "FAKE" if prob > 50 else "REAL"
+                            st.image(face_img, caption=f"{label}: {prob:.1f}%")
                     
                     if avg_fake_prob > 50:
                         st.error(f"Deepfake Detected! ({avg_fake_prob:.1f}% confidence)")
