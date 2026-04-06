@@ -4,8 +4,7 @@ Welcome to the Deepfake Auditor. This project is a forensics tool designed to ch
 
 Instead of just giving a yes or no answer (acting like a black box), it tries to explain its reasoning. It does this by showing you:
 1. **Grad-CAM heatmaps**: To show exactly which parts of a face triggered the deepfake alert.
-2. **Frequency Analysis (FFT)**: To spot weird upsampling patterns that sometimes happen when AI generates faces.
-3. **Ablation Testing**: To double-check its own work by blurring the suspected fake areas and seeing if its confidence drops significantly.
+2. **Ablation Testing**: To double-check its own work by blurring the suspected fake areas and seeing if its confidence drops significantly.
 
 ## How to Run
 

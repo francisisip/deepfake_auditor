@@ -12,7 +12,6 @@ import sys
 # We need to import our custom explainability modules from the parent directory structure
 from preprocessing.face_extractor import extract_face
 from explainability.gradcam import generate_gradcam_heatmap
-from explainability.fft_analysis import generate_fft_profile
 from explainability.ablation import perform_ablation
 
 st.set_page_config(page_title="Deepfake Auditor", page_icon="shield", layout="wide")
@@ -166,14 +165,7 @@ if uploaded_video is not None:
                 else:
                     st.warning("Couldn't find clear faces in this video. Please make sure the lighting is okay and faces are visible.")
                 
-                # FFT Frequency Analysis
-                st.markdown("---")
-                st.subheader("Frequency Domain Analysis (FFT)")
-                st.write("We check the frequency domain of the face to spot repeating patterns, which often happen when videos are AI-generated.")
-                
-                with st.spinner("Analyzing frequency domain..."):
-                    fft_fig = generate_fft_profile(best_face)
-                    st.pyplot(fft_fig)
+
 
     # Cleanup the temporary video file
     try:
